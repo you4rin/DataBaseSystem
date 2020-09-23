@@ -1,6 +1,10 @@
-SELECT Trainer.name
-FROM Trainer
-JOIN CatchedPokemon ON CatchedPokemon.owner_id=Trainer.id
-GROUP BY Trainer.name
-HAVING COUNT(DISTINCT CatchedPokemon.pid)<>COUNT(CatchedPokemon.id)
-ORDER BY Trainer.name;
+SELECT name
+FROM(
+  SELECT DISTINCT x.name, a.pid
+  FROM Trainer x
+  JOIN CatchedPokemon a ON a.owner_id=x.id
+  JOIN CatchedPokemon b ON b.owner_id=x.id
+  WHERE a.pid=b.pid
+  AND a.id<>b.id
+  ORDER BY x.name
+)CNT;
